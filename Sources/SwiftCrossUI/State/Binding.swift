@@ -36,4 +36,9 @@ public class Binding<Value> {
             }
         )
     }
+
+    // PFZ - support for subscripts
+    subscript<Subject>(dynamicMember keyPath: WritableKeyPath<Value, Subject>) -> Binding<Subject> {
+        get
+    }
 }
