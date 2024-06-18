@@ -1,6 +1,7 @@
 /// A value that can read and write a value owned by a source of truth. Can be thought of
 /// as a writable reference to the value.
 @propertyWrapper
+@dynamicMemberLookup
 public class Binding<Value> {
     public var wrappedValue: Value {
         get {
@@ -37,8 +38,11 @@ public class Binding<Value> {
         )
     }
 
-    // PFZ - support for subscripts
-    subscript<Subject>(dynamicMember keyPath: WritableKeyPath<Value, Subject>) -> Binding<Subject> {
-        get
+    // Support for subscripts
+    public subscript<Subject>(dynamicMember keyPath: WritableKeyPath<Value, Subject>) -> Binding<Subject> {
+        return Binding<Subject>(
+            get: { self.wrappedValue[keyPath: keyPath] },
+            set: { self.wrappedValue[keyPath: keyPath] = $0 }
+        )
     }
 }
